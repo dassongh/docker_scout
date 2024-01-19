@@ -1,0 +1,23 @@
+import { Command as CommanderCommand } from 'commander';
+import { Command, ScoutCommand } from './command';
+
+export class Cli {
+	private program: CommanderCommand;
+	private commands: Command[];
+
+	constructor() {
+		this.program = new CommanderCommand();
+		this.program.name('docker_scout').version('1.0.0');
+
+		this.commands = [new ScoutCommand(this.program)];
+	}
+
+	public run() {
+		for (const command of this.commands) {
+			command.handle();
+		}
+
+		this.program.parse();
+		this.program.on('error', console.error);
+	}
+}
