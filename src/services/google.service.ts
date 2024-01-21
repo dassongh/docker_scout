@@ -52,7 +52,7 @@ export class GoogleService {
 		try {
 			file = await fs.readFile(this.pkeyPath, { encoding: 'utf-8' });
 		} catch (error) {
-			console.error(error);
+			console.error('Pkey not found');
 			return null;
 		}
 

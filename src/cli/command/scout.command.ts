@@ -68,32 +68,45 @@ export class ScoutCommand implements Command {
 				}
 
 				if (options.google) {
-					return this.googleService
-						.sendCsv(csv)
-						.then(res => {
-							if (!res) {
-								console.error('Upload failed');
-								return;
-							}
+					let res;
+					try {
+						res = await this.googleService.sendCsv(csv);
+					} catch (error) {
+						console.error(error);
+						return;
+					}
 
-							console.log('Your csv file was uploaded to Google Drive');
-							console.log(`File id is ${res.data.id}`);
-						})
-						.catch(error => {
+					if (!res) {
+						console.warn('Upload to Google failed');
+						console.warn('Uploading to scan_results directory instead');
+
+						try {
+							return await fs.writeFile(
+								path.resolve(__dirname, `../../../scan_results/scan_result-${Date.now()}.csv`),
+								csv,
+								{
+									encoding: 'utf-8',
+								},
+							);
+						} catch (error) {
 							console.error(error);
-						});
+						}
+					}
+
+					console.log('Your csv file was uploaded to Google Drive');
+					console.log(`File id is ${res?.data.id}`);
+					return;
 				}
 
-				return fs
-					.writeFile(path.resolve(__dirname, `../../../scan_results/scan_result-${Date.now()}.csv`), csv, {
+				try {
+					await fs.writeFile(path.resolve(__dirname, `../../../scan_results/scan_result-${Date.now()}.csv`), csv, {
 						encoding: 'utf-8',
-					})
-					.then(() => {
-						console.log('Your csv file was saved');
-					})
-					.catch(error => {
-						console.error(error);
 					});
+				} catch (error) {
+					console.error(error);
+				}
+
+				console.log('Your csv file was saved to scan_results directory');
 			});
 	}
 }
