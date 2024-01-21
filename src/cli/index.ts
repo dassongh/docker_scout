@@ -1,4 +1,5 @@
 import { Command as CommanderCommand } from 'commander';
+import { GoogleService } from '../services/google.service';
 import { Command, ScoutCommand } from './command';
 
 export class Cli {
@@ -7,9 +8,9 @@ export class Cli {
 
 	constructor() {
 		this.program = new CommanderCommand();
-		this.program.name('docker_scout').version('1.0.0');
+		this.program.name('Docker Scout').version('1.0.0');
 
-		this.commands = [new ScoutCommand(this.program)];
+		this.commands = [new ScoutCommand(this.program, new GoogleService())];
 	}
 
 	public run() {
