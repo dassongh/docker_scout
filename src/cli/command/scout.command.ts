@@ -23,7 +23,6 @@ export class ScoutCommand implements Command {
 			.option('-R, --raw', 'If set, show raw result in console')
 			.option('-G, --google', 'If set, upload result to Google Drive')
 			.action(async (image: string, options: { raw: boolean; google: boolean }) => {
-				console.log(options);
 				console.log('Scouting...');
 				let res;
 				try {
@@ -62,13 +61,8 @@ export class ScoutCommand implements Command {
 				const csv = parser.parse(formattedResult);
 
 				if (options.raw) {
-					return fs
-						.writeFile(path.resolve(__dirname, `../../../scan_results/scan_result-${Date.now()}.csv`), csv, {
-							encoding: 'utf-8',
-						})
-						.catch(error => {
-							console.error(error);
-						});
+					console.log(csv);
+					return;
 				}
 
 				if (options.google) {
@@ -88,7 +82,16 @@ export class ScoutCommand implements Command {
 						});
 				}
 
-				console.log(csv);
+				return fs
+					.writeFile(path.resolve(__dirname, `../../../scan_results/scan_result-${Date.now()}.csv`), csv, {
+						encoding: 'utf-8',
+					})
+					.then(() => {
+						console.log('Your csv file was saved');
+					})
+					.catch(error => {
+						console.error(error);
+					});
 			});
 	}
 }

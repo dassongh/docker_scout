@@ -2,9 +2,11 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import { google } from 'googleapis';
+import { Pkey } from '../interfaces';
 
 export class GoogleService {
 	private scopes = ['https://www.googleapis.com/auth/drive.file'];
+	private pkeyPath = path.resolve(__dirname, '../../creds/pk.json');
 
 	public async sendCsv(csv: string) {
 		const client = await this.authorize();
@@ -26,6 +28,14 @@ export class GoogleService {
 		}
 	}
 
+	public async setPkey(pkey: string) {
+		try {
+			await fs.writeFile(this.pkeyPath, pkey, { encoding: 'utf-8' });
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
 	private async authorize() {
 		const pkey = await this.getPkey();
 		if (!pkey) {
@@ -37,11 +47,10 @@ export class GoogleService {
 		return jwtClient;
 	}
 
-	private async getPkey() {
-		const pkeyPath = path.resolve(__dirname, '../../creds/pk.json');
+	private async getPkey(): Promise<Pkey | null> {
 		let file;
 		try {
-			file = await fs.readFile(pkeyPath, { encoding: 'utf-8' });
+			file = await fs.readFile(this.pkeyPath, { encoding: 'utf-8' });
 		} catch (error) {
 			console.error(error);
 			return null;
@@ -49,6 +58,4 @@ export class GoogleService {
 
 		return JSON.parse(file);
 	}
-
-	public async setPkey() {}
 }

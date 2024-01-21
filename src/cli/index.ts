@@ -1,6 +1,7 @@
 import { Command as CommanderCommand } from 'commander';
+
 import { GoogleService } from '../services/google.service';
-import { Command, ScoutCommand } from './command';
+import { Command, PkeyCommand, ScoutCommand } from './command';
 
 export class Cli {
 	private program: CommanderCommand;
@@ -10,7 +11,10 @@ export class Cli {
 		this.program = new CommanderCommand();
 		this.program.name('Docker Scout').version('1.0.0');
 
-		this.commands = [new ScoutCommand(this.program, new GoogleService())];
+		this.commands = [
+			new ScoutCommand(this.program, new GoogleService()),
+			new PkeyCommand(this.program, new GoogleService()),
+		];
 	}
 
 	public run() {
