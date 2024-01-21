@@ -14,6 +14,7 @@ written to stdout or sent to Google Drive.
 
 - clone the repo
 - cd into project root directory
+- run `npm i`
 - run `npm run build`
 - run `node dist` to get program description
 - run `node dist scout --help` to get scout command description
