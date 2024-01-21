@@ -21,7 +21,7 @@ export class PkeyCommand implements Command {
 				try {
 					pkey = await fs.readFile(path, { encoding: 'utf-8' });
 				} catch (error) {
-					console.error(error);
+					console.error('No such file or directory');
 					return;
 				}
 
