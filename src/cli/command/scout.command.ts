@@ -18,7 +18,9 @@ export class ScoutCommand implements Command {
 	handle(): void {
 		this.program
 			.command('scout')
-			.description('Scout provided docker image and save result in csv file.')
+			.description(
+				'Scout provided docker image and save result in csv file. If no options provided, result will be saved to scan_results directory',
+			)
 			.argument('<image>', 'Docker image name')
 			.option('-R, --raw', 'If set, show raw result in console')
 			.option('-G, --google', 'If set, upload result to Google Drive')
@@ -28,7 +30,7 @@ export class ScoutCommand implements Command {
 				try {
 					res = await exec(`docker scout cves --format sarif --output res.json ${image}`);
 				} catch (error) {
-					console.error(error);
+					console.error('Scouting failed');
 					return;
 				}
 
