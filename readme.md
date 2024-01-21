@@ -2,8 +2,8 @@
 
 ### Overview
 
-Command line tool for scouting docker images. Result are saving to scan_results directory by default. But it can be also
-written to stdout or sent to Google Drive.
+Command line tool for scouting docker images. Results are saving to scan_results directory by default. But it can be
+also written to stdout or sent to Google Drive.
 
 ### Commands
 
