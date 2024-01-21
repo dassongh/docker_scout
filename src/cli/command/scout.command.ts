@@ -30,7 +30,7 @@ export class ScoutCommand implements Command {
 				try {
 					res = await exec(`docker scout cves --format sarif --output res.json ${image}`);
 				} catch (error) {
-					console.error('Scouting failed');
+					console.error('Image not found');
 					return;
 				}
 
